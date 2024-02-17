@@ -27,13 +27,13 @@ Function Copy-PNPNavigation {
       Install-Module -Name ImportExcel -Force
      }
 
-     if (Get-Module -ListAvailable -Name SharePointPnPPowerShellOnline) {
-        Import-Module -Name SharePointPnPPowerShellOnline
+     if (Get-Module -ListAvailable -Name PnP.PowerShell) {
+        Import-Module -Name PnP.Powershell
          
     }
      else {
         Write-Host "Installing PNP Online module..." -ForegroundColor Yellow
-      Install-Module -Name SharePointPnPPowerShellOnline -Force
+      Install-Module -Name PnP.Powershell -Force
      }
      
 
@@ -126,7 +126,7 @@ If ($DestinationSite) {
      Write-Host ""
      Write-Host "Connecting to the Destination Site..." -ForegroundColor Yellow
      Write-Host ""
-Connect-PnPOnline -Url $DestinationSite -UseWebLogin
+Connect-PnPOnline -Url $DestinationSite -Interactive
 
 
 $ExcelBackupFile = Import-Excel -Path $FileDestination
