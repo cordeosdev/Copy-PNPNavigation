@@ -1,4 +1,15 @@
+# Modifications by rsmith-studio365 on 02/17/2024
+#  Changenged SharePoint module to PnP.Powershell
+#  Replaced Connect-PnPOnline -UseWebLogin to -Interactive
+#  Working on routine to rename relative URL paths from source site to destination site
+#  look for comment "code by rsmith-studio365"
 
+#working on where to add this, so that it updates the url path to the destination site
+        #code change by rsmith-studio365 | Replace $SourceName with $DestinationName
+      #  if ($MainMenuURL -like "*$SourceSiteName*") {
+           # $MainMenuURL = $MainMenuURL -replace [regex]::Escape($SourceName), $DestinationName}
+        #end code change by rsmith-studio365
+        
 Function Copy-PNPNavigation {
  
     Param (
@@ -52,6 +63,38 @@ $MainNavigationData = Get-PnPNavigationNode  -Location $NavigationLocation
      Write-Host ""
      Write-Host "Getting Navigation information, Please wait..." -ForegroundColor Yellow
      Write-Host ""
+##########GET SOURCE AND TARGET SITE NAMES#########
+#code by rsmith-studio365
+#Get SourceName and TargetName short versions:  e.g, /sites/Foo from $
+# Extract the part after the second-to-last forward slash
+$SourceName = $SourceSite -replace '^.*\/.*\/', ''
+
+# Check if $SourceSite contains "/teams/" or "/sites/"
+if ($SourceSite -like "*sharepoint.com/teams/*") {
+    $R = "Red"
+    $SourceName = "/teams/$SourceName"
+} elseif ($SourceSite -like "*sharepoint.com/sites/*") {
+    $R = "Blue"
+    $SourceName = "/sites/$SourceName"
+}
+
+# Extract the part after the second-to-last forward slash
+$DestinationName = $DestinationSite -replace '^.*\/.*\/', ''
+
+# Check if $DestinationSite contains "/teams/" or "/sites/"
+if ($DestinationSite -like "*sharepoint.com/teams/*") {
+    $R = "Red"
+    $DestinationName = "/teams/$DestinationName"
+} elseif ($DestinationSite -like "*sharepoint.com/sites/*") {
+    $R = "Blue"
+    $DestinationName = "/sites/$DestinationName"
+}
+Write-Host $SourceName 
+Write-Host $DestinationName
+########## END GET SOURCE AND TARGET SITE NAMES#########
+
+
+     
 foreach ($MainMenu in $MainNavigationData) {
 
     $ManinMenuID = $MainMenu.Id
